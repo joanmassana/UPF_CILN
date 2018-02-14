@@ -161,7 +161,7 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
 
     "*** YOUR CODE HERE ***"
-    # Declaramos una cola de prioridad para implementar este tipo de búsqueda
+    # Declaramos una cola de prioridad para implementar este tipo de busqueda
     ucs_priorityQueue = util.PriorityQueue()
     visited_nodes = []
     actions = []
@@ -170,17 +170,17 @@ def uniformCostSearch(problem):
 
     while ucs_priorityQueue.isEmpty() == 0:
 
-        # Cogemos el nodo de más prioridad y guardamos su estado y las acciones
+        # Cogemos el nodo de mas prioridad y guardamos su estado y las acciones
         state, actions = ucs_priorityQueue.pop()
 
-        # Mientras sea un nodo que aun no hemos visitado, lo añadimos a la lista de visitados y comprobamos si es goalState
+        # Mientras sea un nodo que aun no hemos visitado, lo anadimos a la lista de visitados y comprobamos si es goalState
         if state not in visited_nodes:
             visited_nodes.append(state)
 
             if problem.isGoalState(state) == 1:
                 return actions
 
-            # Comprobamos los sucesores del nodo, si no los hemos visitado, los añadimos a la cola de prioridad, asignando como prioridad el coste que tienen sus acciones
+            # Comprobamos los sucesores del nodo, si no los hemos visitado, los anadimos a la cola de prioridad, asignando como prioridad el coste que tienen sus acciones
             for leaf in problem.getSuccessors(state):
                 next_state = leaf[0]
                 next_direction = leaf[1]
@@ -204,26 +204,26 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
 
     "*** YOUR CODE HERE ***"
-    # Declaramos una cola de prioridad para implementar este tipo de búsqueda
+    # Declaramos una cola de prioridad para implementar este tipo de busqueda
     aStar_priorityQueue = util.PriorityQueue()
     visited_nodes = []
     actions = []
-    # Push del primer nodo a la cola de prioridad, que toma un item y una prioridad asociada, que en este caso es una heurística
+    # Push del primer nodo a la cola de prioridad, que toma un item y una prioridad asociada, que en este caso es una heuristica
     aStar_priorityQueue.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
 
     while aStar_priorityQueue.isEmpty() == 0:
 
-        # Cogemos el nodo de más prioridad y guardamos su estado y las acciones
+        # Cogemos el nodo de mas prioridad y guardamos su estado y las acciones
         state, actions = aStar_priorityQueue.pop()
 
-        # Mientras sea un nodo que aun no hemos visitado, lo añadimos a la lista de visitados y comprobamos si es goalState
+        # Mientras sea un nodo que aun no hemos visitado, lo anadimos a la lista de visitados y comprobamos si es goalState
         if state not in visited_nodes:
             visited_nodes.append(state)
 
             if problem.isGoalState(state) == 1:
                 return actions
 
-            # Comprobamos los sucesores del nodo, si no los hemos visitado, los añadimos a la cola de prioridad, asignando como prioridad el coste que tienen sus acciones + la heurística
+            # Comprobamos los sucesores del nodo, si no los hemos visitado, los anadimos a la cola de prioridad, asignando como prioridad el coste que tienen sus acciones + la heuristica
             for leaf in problem.getSuccessors(state):
                 next_state = leaf[0]
                 next_direction = leaf[1]
