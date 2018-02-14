@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -90,88 +90,107 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    # print "Start's successors:", problem.getSuccessors(problem.getStartState())
 
     dfs_stack = util.Stack()
     visited_nodes = []
     actions = []
+
+    # We push the first node to the stack + no actions to get to it
     dfs_stack.push((problem.getStartState(), []))
 
+    # While the stack is empty...
     while dfs_stack.isEmpty() == 0:
 
+        # We pop the top state of the stack + actions to get to it
         state, actions = dfs_stack.pop()
+        # We add the state to our visited states
         visited_nodes.append(state)
-        #print "Pop: ", state
+        # print "Pop: ", state
 
+        # If the node we are visiting is the goal state, we return the actions to get to it
         if problem.isGoalState(state) == 1:
             return actions
-
+        # We check the leafs of the actual node
         for leaf in problem.getSuccessors(state):
-            #print "Successors : ", problem.getSuccessors(state)
+            # print "Successors : ", problem.getSuccessors(state)
             next_state = leaf[0]
             next_direction = leaf[1]
-            #print "Visited: ", visited_nodes
+            # print "Visited: ", visited_nodes
+            # If the next leaf state is not in visited nodes, we push it to the stack with the actions to get to it
             if next_state not in visited_nodes:
-                #print "Pushing: ", next_state
+                # print "Pushing: ", next_state
                 dfs_stack.push((next_state, actions + [next_direction]))
 
     util.raiseNotDefined()
 
+
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
 
-    "*** YOUR CODE HERE ***"	
-    
+    "*** YOUR CODE HERE ***"
+
     bfs_queue = util.Queue()
     visited_nodes = []
     actions = []
+    # We push the first node to the queue + no actions to get to it
     bfs_queue.push((problem.getStartState(), []))
     visited_nodes.append(problem.getStartState())
 
     while bfs_queue.isEmpty() == 0:
+        # We pop the top state of the stack + actions to get to it
         state, actions = bfs_queue.pop()
-
+        # If the node we are visiting is the goal state, we return the actions to get to it
         if problem.isGoalState(state) == 1:
             return actions
-
+        # We check the leafs of the actual node
         for leaf in problem.getSuccessors(state):
             next_state = leaf[0]
             next_direction = leaf[1]
 
+            # If the next leaf state is not in visited nodes, we push it to the queue with the actions to get to it
             if next_state not in visited_nodes:
                 bfs_queue.push((next_state, actions + [next_direction]))
+                # We add the state to our visited states
                 visited_nodes.append(next_state)
 
     util.raiseNotDefined()
 
+
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    
+
     "*** YOUR CODE HERE ***"
-    
+    # Declaramos una cola de prioridad para implementar este tipo de búsqueda
     ucs_priorityQueue = util.PriorityQueue()
     visited_nodes = []
     actions = []
-    ucs_priorityQueue.push((problem.getStartState(), []), 0)  #push(self,item,priority)    
-    
+    # Push del primer nodo a la cola de prioridad, que toma un item y una prioridad asociada
+    ucs_priorityQueue.push((problem.getStartState(), actions), 0)
+
     while ucs_priorityQueue.isEmpty() == 0:
 
+        # Cogemos el nodo de más prioridad y guardamos su estado y las acciones
         state, actions = ucs_priorityQueue.pop()
 
+        # Mientras sea un nodo que aun no hemos visitado, lo añadimos a la lista de visitados y comprobamos si es goalState
         if state not in visited_nodes:
             visited_nodes.append(state)
 
             if problem.isGoalState(state) == 1:
                 return actions
 
+            # Comprobamos los sucesores del nodo, si no los hemos visitado, los añadimos a la cola de prioridad, asignando como prioridad el coste que tienen sus acciones
             for leaf in problem.getSuccessors(state):
                 next_state = leaf[0]
                 next_direction = leaf[1]
 
                 if next_state not in visited_nodes:
-                    ucs_priorityQueue.push((next_state, actions + [next_direction]), problem.getCostOfActions(actions + [next_direction]))
+                    ucs_priorityQueue.push((next_state, actions + [next_direction]),
+                                           problem.getCostOfActions(actions + [next_direction]))
 
     util.raiseNotDefined()
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -183,30 +202,36 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    
+
     "*** YOUR CODE HERE ***"
-    
+    # Declaramos una cola de prioridad para implementar este tipo de búsqueda
     aStar_priorityQueue = util.PriorityQueue()
     visited_nodes = []
     actions = []
-    aStar_priorityQueue.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))     
-    
+    # Push del primer nodo a la cola de prioridad, que toma un item y una prioridad asociada, que en este caso es una heurística
+    aStar_priorityQueue.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
+
     while aStar_priorityQueue.isEmpty() == 0:
 
+        # Cogemos el nodo de más prioridad y guardamos su estado y las acciones
         state, actions = aStar_priorityQueue.pop()
 
+        # Mientras sea un nodo que aun no hemos visitado, lo añadimos a la lista de visitados y comprobamos si es goalState
         if state not in visited_nodes:
             visited_nodes.append(state)
 
             if problem.isGoalState(state) == 1:
                 return actions
 
+            # Comprobamos los sucesores del nodo, si no los hemos visitado, los añadimos a la cola de prioridad, asignando como prioridad el coste que tienen sus acciones + la heurística
             for leaf in problem.getSuccessors(state):
                 next_state = leaf[0]
                 next_direction = leaf[1]
 
                 if next_state not in visited_nodes:
-                    aStar_priorityQueue.push((next_state, actions + [next_direction]), problem.getCostOfActions(actions + [next_direction]) + heuristic(next_state, problem))
+                    aStar_priorityQueue.push((next_state, actions + [next_direction]),
+                                             problem.getCostOfActions(actions + [next_direction]) + heuristic(
+                                                 next_state, problem))
 
     util.raiseNotDefined()
 

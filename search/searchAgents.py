@@ -40,6 +40,7 @@ from game import Actions
 import util
 import time
 import search
+import math
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -295,7 +296,8 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        return self.startingPosition
+        print "StartState: ", self.startingPosition
+        return (self.startingPosition, self.corners)
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -303,8 +305,12 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        for corner in self.corners:
-            if corner == self.getState()
+        for node in self.corners:
+            if node == state[0]:
+                return True
+            else:
+                return False
+
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -319,6 +325,7 @@ class CornersProblem(search.SearchProblem):
         """
 
         successors = []
+        print "State : ", state
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -328,6 +335,25 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            #print "Action :", action
+            pos = state[0]
+            print "state", state
+            print "pos", pos
+            x, y = pos
+
+            #We obtain the next direction f.e. North -> 0 , 1
+            dx, dy = Actions.directionToVector(action)
+            #We add the direction to the state position
+            nextx = int(x + dx)
+            nexty = int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            #cprint "hitswall: ", hitsWall
+
+            #If with the movement we don't hit the wall...
+            if not hitsWall:
+                #The nextState has this coordinates and we append it to the successors list
+                nextState = (nextx, nexty)
+                successors.append(( nextState, action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
