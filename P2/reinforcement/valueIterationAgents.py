@@ -48,9 +48,12 @@ class ValueIterationAgent(ValueEstimationAgent):
 
         for i in range(self.iterations):
             stateValue = util.Counter()
+            #For every state e in the mdp
             for s in self.mdp.getStates():
                 actionValue = util.Counter()
+                #For every possible action a from state s
                 for a in self.mdp.getPossibleActions(s):
+                	#Compute qValue for each action a from state s
                     actionValue[a] = self.computeQValueFromValues(s, a)
                 stateValue[s] = actionValue[actionValue.argMax()]
             self.values = stateValue
@@ -72,6 +75,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         q = 0
         #Get probabilities for transitions determined by pair state/action
         for nextState, prob in self.mdp.getTransitionStatesAndProbs(state, action):
+        	#Bellman equations
             q += prob * (self.mdp.getReward(state, action, nextState) + (self.discount * self.values[nextState]))
         return q
 
@@ -89,12 +93,16 @@ class ValueIterationAgent(ValueEstimationAgent):
         "*** YOUR CODE HERE ***"
         policy = util.Counter()
 
+		#If state is terminal, there are no legal actions
         if self.mdp.isTerminal(state):
             return None
-
+		
+		#For every possible action
         for a in self.mdp.getPossibleActions(state):
+        	#Calculate  policy
             policy[a] = self.computeQValueFromValues(state, a)
 
+		#Policy is the maximum qValue
         return policy.argMax()
 
         util.raiseNotDefined()
