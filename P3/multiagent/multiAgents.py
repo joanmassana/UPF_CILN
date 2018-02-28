@@ -74,7 +74,26 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+        baseValue = successorGameState.getScore()
+
+        #If close to ghost --> less score (baseValue --)
+        ghostMinDistance = 100000
+        for ghost in newGhostStates:
+            ghostDist = util.manhattanDistance(newPos, ghost.getPosition())
+            if (ghostDist < ghostMinDistance) and (ghostDist > 0):
+                ghostMinDistance = ghostDist
+
+
+        #If close to food --> more score (baseValue ++)
+        foodMinDistance = 100000
+        for food in newFood.asList():
+            foodDist = util.manhattanDistance(newPos, food)
+            if foodDist < foodMinDistance:
+                foodMinDistance = foodDist
+
+        baseValue = baseValue + 11/foodMinDistance - 8/ghostMinDistance
+
+        return baseValue
 
 def scoreEvaluationFunction(currentGameState):
     """
@@ -129,7 +148,37 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Returns the total number of agents in the game
         """
         "*** YOUR CODE HERE ***"
+
+        def minimax(state, idAgent, depth):
+            if idAgent == state.getNumAgents():
+                if depth == self.depth:
+                    return self.evaluationFunction(state)
+                else:
+                    return minimax(state, 0, depth + 1)
+            else:
+                moves = state.getLegalActions(idAgent)
+                moveValues=[]
+                if len(moves) == 0:
+                    return self.evaluationFunction(state)
+                for move in moves:
+                    moveValues.append(minimax(state.generateSuccessor(idAgent, move), idAgent + 1, depth))
+                if idAgent is not 0:
+                    return min(moveValues)
+                else:
+                    return max(moveValues)
+
+        result=""
+        maxV=-10000
+        for move in gameState.getLegalActions(0):
+            miniValue = minimax(gameState.generateSuccessor(0, move), 1, 1)
+            if miniValue > maxV:
+                maxV = miniValue
+                result = move
+
+        return result
+
         util.raiseNotDefined()
+
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
