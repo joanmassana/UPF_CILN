@@ -82,7 +82,8 @@ class ReflexAgent(Agent):
             ghostDist = util.manhattanDistance(newPos, ghost.getPosition())
             if (ghostDist < ghostMinDistance) and (ghostDist > 0):
                 ghostMinDistance = ghostDist
-
+                if ghostMinDistance < 3:
+                    baseValue -= 1000
 
         #If close to food --> more score (baseValue ++)
         foodMinDistance = 100000
@@ -190,6 +191,10 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
           Returns the minimax action using self.depth and self.evaluationFunction
         """
         "*** YOUR CODE HERE ***"
+
+
+
+
         util.raiseNotDefined()
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
