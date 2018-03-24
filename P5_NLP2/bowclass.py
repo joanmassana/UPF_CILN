@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import string
 import heapq
 from os import listdir
@@ -6,7 +8,7 @@ def main():
     print "### Start of Execution ###\n"
 
     #NSize es el numero de features.
-    NSize = 150
+    NSize = 400
 
     #Creamos un bag Of Words como un diccionario donde almacenaremos las palabras del dataset y su ocurrencia.
     bagOfWords = {}
@@ -35,6 +37,7 @@ def main():
                 #Si no se encuentra en el diccionario, se añade con valor 1.
                 else:
                     bagOfWords[word] = 1.0
+
 
     #writeDicToFile('testOutput',bagOfWords)
 
